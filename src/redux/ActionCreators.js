@@ -16,3 +16,8 @@ export const addPictures = (pictures) => ({
     type: ActionTypes.ADD_PICTURES,
     payload: pictures
 })
+
+export const addToBasket = (basket) => ({
+    type: ActionTypes.ADD_TO_BASKET,
+    payload: basket
+})

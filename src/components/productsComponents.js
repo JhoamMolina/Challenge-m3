@@ -1,8 +1,6 @@
 import React from "react";
-import OrderBy from "./orderComponent";
 
-function RenderImage({picture}){
-    
+function RenderImage({picture,addTobasket}){
     return(
         <div>
         <img styles="position: relative"src={picture.image} alt={picture.name} width="192px" height=" 293px" />
@@ -10,12 +8,11 @@ function RenderImage({picture}){
                 <h2>{picture.name}</h2> 
                 <h3>R$ {picture.price}</h3>
                 <p>até {picture.parcelamento[0]} de R${picture.parcelamento[1]}</p>
-                <button class="buttonBlack">COMPRAR</button>
+                <button onClick={() => addTobasket(picture)} class="buttonBlack col-12">COMPRAR</button>
             </div>
         </div>
     )
 }
-
 
 let result = [];
 
@@ -37,25 +34,35 @@ const Products = (props)  => {
             result = props.pictures
 
     }
-    const menu = result.map((picture) => {
 
+    const filterByColor = (products, color) => {
+        return products.filter(item => (item.color === color) || (color === ""))
+    }
+
+    const filterByPrice = (products, mayor, menor) => {
+        return products.filter(item => ((mayor === 0) && (menor === 0)) || ((item.price > mayor) && (item.price < menor)))
+    }
+
+    const filterBySize = (products, tamano) => {
+        return products.filter(item => ((tamano === "") || ((item.size[0] === tamano) || (item.size[1] === tamano))))
+    }
+
+
+    const menu = filterByColor(filterByPrice(filterBySize(result,props.size), props.mayor, props.menor), props.color).map((picture) => {
         return (
-            <div key={picture.id} class="card-product col-4">
-                <RenderImage picture={picture}/>
+            <div key={picture.id} class="card-product col-4 col-s-6">
+                <RenderImage picture={picture} addTobasket={props.addToBasket}/>
             </div>      
         );
 
-    });
-
-    
+    });    
 
     return (
-        <div class="filter col-8">
+        <div class="content-products col-8 col-s-12">
             {menu}
         </div>
 
     )
-
 }
 
 export default Products
