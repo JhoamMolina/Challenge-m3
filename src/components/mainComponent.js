@@ -1,3 +1,6 @@
+//Este es el componente principal de la aplicación donde se estan comunicando todos los componentes
+//Se encarga de recibir los estados de los child componenets y pasar a estos props, también aqui usamos nuestro reducer
+
 import React from "react";
 import { Component } from "react";
 import Filter from './filterComponent';
@@ -6,7 +9,7 @@ import Header from './headerComponent';
 import OrderBy from "./orderComponent";
 import Products from './productsComponents';
 import { connect } from 'react-redux';
-import { addToBasket, fetchPictures } from "../redux/ActionCreators";
+import { getMorePictures, addToBasket, fetchPictures } from "../redux/ActionCreators";
 
 
 
@@ -21,7 +24,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
     fetchPictures: () => {dispatch(fetchPictures())},
-    addToBasket: (picture) => {dispatch(addToBasket(picture))}
+    addToBasket: (picture) => {dispatch(addToBasket(picture))},
+    getMorePictures: () => {dispatch(getMorePictures())}
 })
 
 
@@ -78,13 +82,15 @@ class Main extends Component{
             <div class="outside-container"> 
             <Header  basketAmount = {this.props.basket.basket.length}  />
             <div class="content-wrap">
-                <div class="innerContainer">
-                <div class="row blusas col-12 col-s-12">
+                <div class="innerContainer col-12 col-s-12">
+                <div class="blusas col-12 col-s-12">
                     <h1>Blusas</h1>
                 </div>
                     <Filter sizeHandleCallback = {this.sizeHandleCallback} colorFilterCallback = {this.colorFilterCallback} priceHandleCallback = {this.priceHandleCallback} />
-                    <Products addToBasket = {this.props.addToBasket} pictures={this.props.pictures.pictures} step={this.state.orden} color={this.state.color} mayor={this.state.mayorQue} menor={this.state.menorQue} size={this.state.size}/> 
                     <OrderBy orderCallback = {this.orderByHandleCallback.bind(this)}/>
+                    <Products getMorePictures = {this.props.getMorePictures} addToBasket = {this.props.addToBasket} pictures={this.props.pictures.pictures} step={this.state.orden} color={this.state.color} mayor={this.state.mayorQue} menor={this.state.menorQue} size={this.state.size}/>
+
+
 
                 </div>                
             </div>

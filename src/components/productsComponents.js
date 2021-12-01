@@ -3,7 +3,7 @@ import React from "react";
 function RenderImage({picture,addTobasket}){
     return(
         <div>
-        <img styles="position: relative"src={picture.image} alt={picture.name} width="192px" height=" 293px" />
+        <img styles="position: relative"src={picture.image} alt={picture.name} class="imgPictures" />
             <div>
                 <h2>{picture.name}</h2> 
                 <h3>R$ {picture.price}</h3>
@@ -48,6 +48,8 @@ const Products = (props)  => {
     }
 
 
+
+
     const menu = filterByColor(filterByPrice(filterBySize(result,props.size), props.mayor, props.menor), props.color).map((picture) => {
         return (
             <div key={picture.id} class="card-product col-4 col-s-6">
@@ -58,9 +60,15 @@ const Products = (props)  => {
     });    
 
     return (
-        <div class="content-products col-8 col-s-12">
+   
+        <div class="content-products col-10 col-s-12">
             {menu}
+            <div class="buttonContainer col-12 col-s-12">
+            <button onClick={() => props.getMorePictures()} class="loadMore">Carregar mais</button>
+            </div>
+
         </div>
+
 
     )
 }

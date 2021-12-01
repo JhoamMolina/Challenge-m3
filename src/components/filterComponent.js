@@ -4,10 +4,19 @@ class Filter extends Component {
 
     constructor(props){
         super(props)
+        this.state = {
+            open: false,
+            colorOpen: false,
+            sizeOpen: false,
+            amountOpen: false
+        }
 
         this.handleColorCheckbox = this.handleColorCheckbox.bind(this)
         this.handleRangesCheckbox = this.handleRangesCheckbox.bind(this)
         this.handleSizeCheckbox = this.handleSizeCheckbox.bind(this)
+        this.showMoreColors = this.showMoreColors.bind(this)
+        this.phoneFilter = this.phoneFilter.bind(this)
+        this.arrowHandler = this.arrowHandler.bind(this)
     }
 
 
@@ -77,6 +86,94 @@ class Filter extends Component {
         }
     }
 
+    showMoreColors = () => {
+        console.log("Hola mundo")
+        document.getElementById("hiddenColors").style.display = "inline-block"
+        document.getElementById("displayText").style.display ="none"
+    }
+    
+    phoneFilter(event){
+        var elementId = event.target.id;
+        if(elementId === "phoneFilterButton"){
+            document.getElementById("phoneFilterButton").id = "clickedOrderBy";
+            document.getElementById("orderFilter").hidden = true;
+            document.getElementById("filter").hidden = false;
+            this.setState({
+                open: !this.state.open,
+                colorOpen: true,
+                sizeOpen: true,
+                amountOpen: true
+            })
+
+        }else{
+            document.getElementById("orderFilter").hidden = false;
+            document.getElementById("clickedOrderBy").id = "phoneFilterButton";
+            document.getElementById("filter").hidden = true;
+            this.setState({
+                open: !this.state.open
+            })
+        }
+
+        event.preventDefault();
+    }
+
+    arrowHandlerHelper = (atr, name) => {
+        console.log(atr,name)
+        if((atr === true) && (name === 'color')){
+            this.setState({
+                colorOpen: false,
+                sizeOpen: true,
+                amountOpen: true
+            })
+        }else if((atr === false) && (name === 'color')){
+            this.setState({
+                colorOpen: true,
+                sizeOpen: true,
+                amountOpen: true
+            })
+        }else if((atr === true) && (name === 'size')){
+                this.setState({
+                    colorOpen: true,
+                    sizeOpen: false,
+                    amountOpen: true
+                })
+        }else if((atr === false) && (name === 'size')){
+                this.setState({
+                    colorOpen: true,
+                    sizeOpen: true,
+                    amountOpen: true
+                }) 
+        }else if((atr === true) && (name === 'amount')){
+                    this.setState({
+                        colorOpen: true,
+                        sizeOpen: true,
+                        amountOpen: false
+                    })
+        }else if((atr === false) && (name === 'amount')){
+                    this.setState({
+                        colorOpen: true,
+                        sizeOpen: true,
+                        amountOpen: true
+                    })}  
+    }
+
+    arrowHandler(event){
+        var localName = event.target.attributes.value.value;
+        switch(localName){
+ 
+        case "color":
+            this.arrowHandlerHelper(this.state.colorOpen, localName)             
+            break;
+        case "size":
+            this.arrowHandlerHelper(this.state.sizeOpen, localName)
+            break;
+        case "amount":
+            this.arrowHandlerHelper(this.state.amountOpen, localName)
+            break;
+        default:
+            return "hola";
+        }
+    }
     
 
     
@@ -84,9 +181,15 @@ class Filter extends Component {
 
     render(){        
         return (
-            <div class="filter col-2 col-s-6">
-                <div class="colorFilter col-12">
+            <>
+            <div id="phoneFilter">
+                <button onClick={this.phoneFilter} id="phoneFilterButton">Filtrar</button>
+            </div>
+            <div id="filter" hidden>
+                <div id="colorFilter col-s-12">
                 <h1>Cores</h1>
+                <span onClick={this.arrowHandler} class="material-icons arrow" value="color">keyboard_arrow_down</span>
+                <div hidden={this.state.colorOpen}>
                     <form>
                         <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="amarelo" name="amarelo" value="Amarelo" /> 
                         <label for="amarelo" > Amarelo</label><br/>
@@ -97,11 +200,27 @@ class Filter extends Component {
                         <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="cinza" name="cinza" value="Cinza" /> 
                         <label for="cinza"> Cinza</label><br/>
                         <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="laranja" name="laranja" value="Laranja" /> 
-                        <label for="laranja"> Laranja</label><br/>          
+                        <label for="laranja"> Laranja</label><br/>
+                        <p id="displayText"onClick={this.showMoreColors}>Ver todas as cores</p>
+                        <div id="hiddenColors">
+                        <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="verde" name="verde" value="Verde" /> 
+                        <label for="verde" > Verde</label><br/>
+                        <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="vermelho" name="vermelho" value="Vermelho" /> 
+                        <label for="vermelho" > Vermelho</label><br/>
+                        <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="preto" name="preto" value="Preto" /> 
+                        <label for="preto" > Preto</label><br/>
+                        <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="rosa" name="rosa" value="Rosa" /> 
+                        <label for="rosa" > Rosa</label><br/>
+                        <input class="cb" onChange={this.handleColorCheckbox} type="checkbox" id="vinho" name="vinho" value="Vinho" /> 
+                        <label for="vinho" > Vinho</label><br/>
+                        </div>          
                     </form>
                 </div>
-                <div class="sizeFilter col-12">
+                </div>
+                <div class="sizeFilter col-12 col-s-12">
                 <h1>Tamanhos</h1>
+                <span onClick={this.arrowHandler} class="material-icons arrow" value="size">keyboard_arrow_down</span>                
+                <div hidden={this.state.sizeOpen}>
                 <form>
                     <ul>
                         <li>
@@ -149,10 +268,13 @@ class Filter extends Component {
                         <label for="46" > 46 </label><br/>
                         </li>
                     </ul>
-                </form>                     
+                </form>  
+                </div>                   
                 </div>
-                <div class="amountFilter col-12 ">
+                <div class="amountFilter col-12 col-s-12">
                 <h1>Faixa de Preço</h1>
+                <span onClick={this.arrowHandler} class="material-icons arrow" value="amount">keyboard_arrow_down</span>                
+                <div hidden={this.state.amountOpen}>
                     <form>
                         <input class="pcb" onChange={this.handleRangesCheckbox} type="checkbox" id="0-50" name="0-50" value="0" /> 
                         <label for="0-50" class="label success"> de R$0 até R$50</label><br/>
@@ -166,7 +288,10 @@ class Filter extends Component {
                         <label for="500+"> a partir de R$ 500</label><br/>          
                     </form>
                 </div>
+
+                </div>
             </div>
+        </>
         )   
     }
 }
